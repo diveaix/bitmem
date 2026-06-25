@@ -2,54 +2,54 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
   JsonFileStorage,
-  ZeroGMem,
-  ZeroGMemApiClient,
+  BitMem,
+  BitMemApiClient,
   memoryInputSchema,
   tradePlanSchema,
   type MemoryInput,
   type TradePlan
-} from "@0g-mem/sdk";
+} from "@bit-mem/sdk";
 
-export type Create0GMemMcpServerOptions = {
+export type CreateBitMemMcpServerOptions = {
   apiBaseUrl?: string;
   apiKey?: string;
   allowLocalFallback?: boolean;
   memoryPath?: string;
 };
 
-export function create0GMemMcpServer(options: Create0GMemMcpServerOptions = {}) {
+export function createBitMemMcpServer(options: CreateBitMemMcpServerOptions = {}) {
   const sdk = options.allowLocalFallback
-    ? new ZeroGMem(
+    ? new BitMem(
         {},
-        new JsonFileStorage(options.memoryPath ?? ".0g-mem/mcp-memory.json")
+        new JsonFileStorage(options.memoryPath ?? ".bit-mem/mcp-memory.json")
       )
     : undefined;
   const apiClient = options.apiKey
-    ? new ZeroGMemApiClient({
+    ? new BitMemApiClient({
         apiKey: options.apiKey,
         baseUrl: options.apiBaseUrl ?? "http://127.0.0.1:8787"
       })
     : undefined;
 
   const server = new McpServer({
-    name: "0g-mem",
+    name: "bit-mem",
     version: "0.1.0"
   });
 
   server.tool(
-    "0gmem_add_memory",
+    "bitmem_add_memory",
     "Store policy, strategy, trade, feedback, protocol, risk, or lesson memory for an agent.",
     memoryInputSchema.shape,
     async (input: MemoryInput) => {
       const memory = apiClient
         ? await apiClient.memory.add(input)
-        : await requireLocalSdk(sdk).ogmem.memory.add(input);
+        : await requireLocalSdk(sdk).bitmem.memory.add(input);
       return jsonResult({ memory });
     }
   );
 
   server.tool(
-    "0gmem_get_profile",
+    "bitmem_get_profile",
     "Return stable agent profile memory plus recent dynamic memory and optional search results.",
     {
       agentId: z.string().min(1),
@@ -59,19 +59,19 @@ export function create0GMemMcpServer(options: Create0GMemMcpServerOptions = {}) 
     async (input: { agentId: string; query?: string; limit?: number }) => {
       const profile = apiClient
         ? await apiClient.profile.get(input)
-        : await requireLocalSdk(sdk).ogmem.profile.get(input);
+        : await requireLocalSdk(sdk).bitmem.profile.get(input);
       return jsonResult({ profile });
     }
   );
 
   server.tool(
-    "0gmem_context_for_trade_plan",
+    "bitmem_context_for_trade_plan",
     "Retrieve relevant context for a transaction plan before risk review.",
     tradePlanSchema.shape,
     async (input: TradePlan) => {
       const context = apiClient
         ? await apiClient.context.forTradePlan(input)
-        : await requireLocalSdk(sdk).ogmem.context.forTradePlan(input);
+        : await requireLocalSdk(sdk).bitmem.context.forTradePlan(input);
       return jsonResult({ context });
     }
   );
@@ -87,7 +87,7 @@ export function create0GMemMcpServer(options: Create0GMemMcpServerOptions = {}) 
       }
 
       const localSdk = requireLocalSdk(sdk);
-      const context = await localSdk.ogmem.context.forTradePlan(input);
+      const context = await localSdk.bitmem.context.forTradePlan(input);
       const verdict = await localSdk.aegis.risk.reviewPlan({ ...input, context });
       const proof = await localSdk.proofs.recordDecision({
         agentId: input.agentId,
@@ -100,7 +100,7 @@ export function create0GMemMcpServer(options: Create0GMemMcpServerOptions = {}) 
   );
 
   server.tool(
-    "0gmem_record_outcome",
+    "bitmem_record_outcome",
     "Record what happened after a transaction plan was executed, failed, reverted, or skipped.",
     {
       agentId: z.string().min(1),
@@ -120,7 +120,7 @@ export function create0GMemMcpServer(options: Create0GMemMcpServerOptions = {}) 
   );
 
   server.tool(
-    "0gmem_reflect_failure",
+    "bitmem_reflect_failure",
     "Create a failure lesson for a plan using stored outcome and context memory.",
     {
       agentId: z.string().min(1),
@@ -137,10 +137,10 @@ export function create0GMemMcpServer(options: Create0GMemMcpServerOptions = {}) 
   return server;
 }
 
-function requireLocalSdk(sdk: ZeroGMem | undefined) {
+function requireLocalSdk(sdk: BitMem | undefined) {
   if (!sdk) {
     throw new Error(
-      "0G-Mem MCP requires an API key. Set OGMEM_API_KEY or pass a Bearer token."
+      "BIT/MEM MCP requires an API key. Set BITMEM_API_KEY or pass a Bearer token."
     );
   }
   return sdk;

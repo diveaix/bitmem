@@ -2,19 +2,19 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { URL } from "node:url";
 import {
   JsonFileStorage,
-  ZeroGMem,
+  BitMem,
   type AgentProfile,
   type ContextResult,
   type MemoryInput,
   type MemoryRecord,
   type TradePlan,
-  type ZeroGMemConfig
-} from "@0g-mem/sdk";
+  type BitMemConfig
+} from "@bit-mem/sdk";
 import { AuthError, JsonAuthStore, type AuthPrincipal } from "./auth.js";
 
 export type ApiOptions = {
-  sdk?: ZeroGMem;
-  config?: ZeroGMemConfig;
+  sdk?: BitMem;
+  config?: BitMemConfig;
   memoryPath?: string;
   authPath?: string;
   auth?: {
@@ -24,7 +24,7 @@ export type ApiOptions = {
 };
 
 type ApiContext = {
-  sdk: ZeroGMem;
+  sdk: BitMem;
   auth: JsonAuthStore;
   appUrl: string;
   returnDevVerificationToken: boolean;
@@ -32,25 +32,25 @@ type ApiContext = {
 
 type HeaderValue = string | number | readonly string[];
 
-const SESSION_COOKIE = "ogmem_session";
+const SESSION_COOKIE = "bitmem_session";
 const DEFAULT_APP_URL = "http://127.0.0.1:5173";
 
-export function create0GMemApi(options: ApiOptions = {}) {
+export function createBitMemApi(options: ApiOptions = {}) {
   const sdk =
     options.sdk ??
-    new ZeroGMem(
+    new BitMem(
       options.config ?? {},
-      new JsonFileStorage(options.memoryPath ?? ".0g-mem/api-memory.json")
+      new JsonFileStorage(options.memoryPath ?? ".bit-mem/api-memory.json")
     );
   const context: ApiContext = {
     sdk,
     auth: new JsonAuthStore(
-      options.authPath ?? process.env.OG_MEM_API_AUTH_PATH ?? ".0g-mem/auth.json"
+      options.authPath ?? process.env.BIT_MEM_API_AUTH_PATH ?? ".bit-mem/auth.json"
     ),
-    appUrl: options.auth?.appUrl ?? process.env.OG_MEM_APP_URL ?? DEFAULT_APP_URL,
+    appUrl: options.auth?.appUrl ?? process.env.BIT_MEM_APP_URL ?? DEFAULT_APP_URL,
     returnDevVerificationToken:
       options.auth?.returnDevVerificationToken ??
-      process.env.OG_MEM_RETURN_DEV_TOKENS !== "false"
+      process.env.BIT_MEM_RETURN_DEV_TOKENS !== "false"
   };
 
   return createServer(async (request, response) => {
@@ -79,7 +79,7 @@ async function routeRequest(
   const method = request.method ?? "GET";
 
   if (method === "GET" && path === "/health") {
-    sendJson(request, response, 200, { ok: true, service: "0g-mem-api" });
+    sendJson(request, response, 200, { ok: true, service: "bit-mem-api" });
     return;
   }
 
@@ -190,7 +190,7 @@ async function routeRequest(
   if (method === "POST" && path === "/memory") {
     const principal = await requirePrincipal(context, request);
     const body = await readJson<MemoryInput>(request);
-    const memory = await context.sdk.ogmem.memory.add(scopeMemoryInput(principal, body));
+    const memory = await context.sdk.bitmem.memory.add(scopeMemoryInput(principal, body));
     sendJson(request, response, 201, {
       memory: unScopeMemoryRecord(principal, memory)
     });
@@ -204,7 +204,7 @@ async function routeRequest(
       const query = url.searchParams.get("query")?.toLowerCase().trim();
       const limit = Number(url.searchParams.get("limit") ?? "100");
       const prefix = `${principal.user.id}:`;
-      const memories = (await context.sdk.ogmem.memory.listAll())
+      const memories = (await context.sdk.bitmem.memory.listAll())
         .filter((memory) => memory.agentId.startsWith(prefix))
         .filter((memory) => !query || memoryMatchesQuery(memory, query))
         .slice(0, Number.isFinite(limit) && limit > 0 ? limit : 100);
@@ -214,7 +214,7 @@ async function routeRequest(
       return;
     }
 
-    const memories = await context.sdk.ogmem.memory.search({
+    const memories = await context.sdk.bitmem.memory.search({
       agentId: scopeAgentId(principal, agentId),
       query: url.searchParams.get("query") ?? undefined,
       limit: Number(url.searchParams.get("limit") ?? "10")
@@ -229,14 +229,14 @@ async function routeRequest(
   if (method === "DELETE" && memoryMatch) {
     const principal = await requirePrincipal(context, request);
     const memoryId = decodeURIComponent(memoryMatch[1]);
-    const memory = (await context.sdk.ogmem.memory.listAll()).find(
+    const memory = (await context.sdk.bitmem.memory.listAll()).find(
       (item) => item.id === memoryId
     );
     if (!memory || !memory.agentId.startsWith(`${principal.user.id}:`)) {
       sendJson(request, response, 404, { error: "Memory not found" });
       return;
     }
-    const deleted = await context.sdk.ogmem.memory.delete(memoryId);
+    const deleted = await context.sdk.bitmem.memory.delete(memoryId);
     sendJson(request, response, 200, {
       memory: deleted ? unScopeMemoryRecord(principal, deleted) : undefined
     });
@@ -251,7 +251,7 @@ async function routeRequest(
       return;
     }
 
-    const profile = await context.sdk.ogmem.profile.get({
+    const profile = await context.sdk.bitmem.profile.get({
       agentId: scopeAgentId(principal, agentId),
       query: url.searchParams.get("query") ?? undefined,
       limit: Number(url.searchParams.get("limit") ?? "10")
@@ -265,7 +265,7 @@ async function routeRequest(
   if (method === "POST" && path === "/context") {
     const principal = await requirePrincipal(context, request);
     const plan = await readJson<TradePlan>(request);
-    const contextResult = await context.sdk.ogmem.context.forTradePlan(
+    const contextResult = await context.sdk.bitmem.context.forTradePlan(
       scopeTradePlan(principal, plan)
     );
     sendJson(request, response, 200, {
@@ -277,7 +277,7 @@ async function routeRequest(
   if (method === "POST" && path === "/review-plan") {
     const principal = await requirePrincipal(context, request);
     const plan = scopeTradePlan(principal, await readJson<TradePlan>(request));
-    const contextResult = await context.sdk.ogmem.context.forTradePlan(plan);
+    const contextResult = await context.sdk.bitmem.context.forTradePlan(plan);
     const verdict = await context.sdk.aegis.risk.reviewPlan({
       ...plan,
       context: contextResult
@@ -492,7 +492,7 @@ function parseCookies(header: string | undefined): Record<string, string> {
 }
 
 function makeSessionCookie(sessionToken: string): string {
-  const sameSite = process.env.OG_MEM_COOKIE_SAMESITE ?? "Lax";
+  const sameSite = process.env.BIT_MEM_COOKIE_SAMESITE ?? "Lax";
   const parts = [
     `${SESSION_COOKIE}=${encodeURIComponent(sessionToken)}`,
     "Path=/",
@@ -500,14 +500,14 @@ function makeSessionCookie(sessionToken: string): string {
     `SameSite=${sameSite}`,
     "Max-Age=604800"
   ];
-  if (process.env.OG_MEM_COOKIE_SECURE === "true") {
+  if (process.env.BIT_MEM_COOKIE_SECURE === "true") {
     parts.push("Secure");
   }
   return parts.join("; ");
 }
 
 function clearSessionCookie(): string {
-  const sameSite = process.env.OG_MEM_COOKIE_SAMESITE ?? "Lax";
+  const sameSite = process.env.BIT_MEM_COOKIE_SAMESITE ?? "Lax";
   const parts = [
     `${SESSION_COOKIE}=`,
     "Path=/",
@@ -515,7 +515,7 @@ function clearSessionCookie(): string {
     `SameSite=${sameSite}`,
     "Max-Age=0"
   ];
-  if (process.env.OG_MEM_COOKIE_SECURE === "true") {
+  if (process.env.BIT_MEM_COOKIE_SECURE === "true") {
     parts.push("Secure");
   }
   return parts.join("; ");

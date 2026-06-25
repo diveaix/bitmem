@@ -11,7 +11,7 @@ type OutcomeFixture = {
 
 const sdk = createDemoSdk();
 const plan = await readJsonFile<TradePlan>(fixturePath("risky-plan.json"));
-const context = await sdk.ogmem.context.forTradePlan(plan);
+const context = await sdk.bitmem.context.forTradePlan(plan);
 const verdict = await sdk.aegis.risk.reviewPlan({ ...plan, context });
 const outcome = await readJsonFile<OutcomeFixture>(fixturePath("failed-outcome.json"));
 const record = await sdk.trades.recordOutcome({

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ZeroGMem } from "../src/index.js";
+import { BitMem } from "../src/index.js";
 
 const token = "0x1111111111111111111111111111111111111111";
 const trustedSpender = "0x2222222222222222222222222222222222222222";
@@ -17,7 +17,7 @@ function approveData(spender: string, amountHex: string): string {
 
 describe("Aegis risk review", () => {
   it("blocks unlimited approval to unknown spender", async () => {
-    const mem = new ZeroGMem();
+    const mem = new BitMem();
     await mem.memory.add({
       agentId: "agent",
       kind: "policy",
@@ -58,7 +58,7 @@ describe("Aegis risk review", () => {
   });
 
   it("allows known contract with no risky calldata", async () => {
-    const mem = new ZeroGMem();
+    const mem = new BitMem();
     await mem.memory.add({
       agentId: "agent",
       kind: "policy",
@@ -91,7 +91,7 @@ describe("Aegis risk review", () => {
   });
 
   it("requires human approval when batch size exceeds policy", async () => {
-    const mem = new ZeroGMem();
+    const mem = new BitMem();
     await mem.memory.add({
       agentId: "agent",
       kind: "policy",
@@ -121,7 +121,7 @@ describe("Aegis risk review", () => {
   });
 
   it("blocks selectors listed in policy", async () => {
-    const mem = new ZeroGMem();
+    const mem = new BitMem();
     await mem.memory.add({
       agentId: "agent",
       kind: "policy",
@@ -164,7 +164,7 @@ describe("Aegis risk review", () => {
   });
 
   it("blocks approvals over maxTokenApprovalAmount", async () => {
-    const mem = new ZeroGMem();
+    const mem = new BitMem();
     await mem.memory.add({
       agentId: "agent",
       kind: "policy",

@@ -1,8 +1,8 @@
-# 0G-Mem Contracts
+# BIT/MEM Contracts
 
 ## AegisProofRegistry
 
-`AegisProofRegistry.sol` anchors 0G-Mem decision artifacts on 0G Chain.
+`AegisProofRegistry.sol` anchors BIT/MEM decision artifacts on 0G Chain.
 
 The SDK stores full memory and risk reports offchain, usually on 0G Storage. This contract records compact hashes:
 

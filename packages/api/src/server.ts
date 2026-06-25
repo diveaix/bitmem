@@ -1,18 +1,18 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { create0GMemApi } from "./index.js";
-import type { ZeroGMemConfig } from "@0g-mem/sdk";
+import { createBitMemApi } from "./index.js";
+import type { BitMemConfig } from "@bit-mem/sdk";
 
 loadEnvFile();
 
 const port = Number(process.env.PORT ?? "8787");
-const memoryPath = process.env.OG_MEM_API_MEMORY_PATH ?? ".0g-mem/api-memory.json";
+const memoryPath = process.env.BIT_MEM_API_MEMORY_PATH ?? ".bit-mem/api-memory.json";
 const config = createConfigFromEnv();
 
-const server = create0GMemApi({ config, memoryPath });
+const server = createBitMemApi({ config, memoryPath });
 
 server.listen(port, () => {
-  console.log(`0G-Mem API listening on http://localhost:${port}`);
+  console.log(`BIT/MEM API listening on http://localhost:${port}`);
   if (config.chain?.provider === "0g") {
     console.log(`0G proof registry enabled at ${config.chain.registryAddress}`);
   }
@@ -43,8 +43,8 @@ function unquoteEnvValue(value: string) {
   return value;
 }
 
-function createConfigFromEnv(): ZeroGMemConfig {
-  const config: ZeroGMemConfig = {};
+function createConfigFromEnv(): BitMemConfig {
+  const config: BitMemConfig = {};
 
   if (
     process.env.OG_EVM_RPC &&

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 /// @title AegisProofRegistry
-/// @notice Anchors 0G-Mem risk decisions and memory/report hashes on an EVM chain.
+/// @notice Anchors BIT/MEM risk decisions and memory/report hashes on an EVM chain.
 contract AegisProofRegistry {
     enum Decision {
         ALLOW,

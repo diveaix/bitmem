@@ -68,7 +68,7 @@ const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 export class JsonAuthStore {
   private state: AuthState | undefined;
 
-  constructor(private readonly filePath = ".0g-mem/auth.json") {}
+  constructor(private readonly filePath = ".bit-mem/auth.json") {}
 
   async requestLogin(input: {
     email: string;
@@ -88,7 +88,7 @@ export class JsonAuthStore {
       state.users.push(user);
     }
 
-    const verificationToken = `ogm_verify_${randomToken(32)}`;
+    const verificationToken = `bitmem_verify_${randomToken(32)}`;
     const tokenRecord: EmailVerificationToken = {
       id: createId("evt"),
       userId: user.id,
@@ -126,7 +126,7 @@ export class JsonAuthStore {
     tokenRecord.usedAt = now.toISOString();
     user.emailVerifiedAt = user.emailVerifiedAt ?? now.toISOString();
 
-    const sessionToken = `ogm_session_${randomToken(32)}`;
+    const sessionToken = `bitmem_session_${randomToken(32)}`;
     const session: Session = {
       id: createId("sess"),
       userId: user.id,
@@ -180,7 +180,7 @@ export class JsonAuthStore {
       throw new AuthError("Email must be verified before creating API keys", 403);
     }
 
-    const secret = `ogm_live_${randomToken(32)}`;
+    const secret = `bitmem_live_${randomToken(32)}`;
     const apiKey: ApiKeyRecord = {
       id: createId("key"),
       userId: input.userId,

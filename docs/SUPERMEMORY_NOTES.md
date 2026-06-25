@@ -1,4 +1,4 @@
-# Supermemory Notes For 0G-Mem
+# Supermemory Notes For BIT/MEM
 
 Source reviewed:
 
@@ -16,21 +16,21 @@ Supermemory is useful as a reference because it packages memory as a developer p
 - MCP tools such as memory, recall, and context
 - plugins for agent tools
 
-## What 0G-Mem Takes From This
+## What BIT/MEM Takes From This
 
-0G-Mem adopts the ergonomics, not the product:
+BIT/MEM adopts the ergonomics, not the product:
 
-- `sdk.ogmem.memory.add(...)`
-- `sdk.ogmem.profile.get(...)`
-- `sdk.ogmem.context.forTradePlan(...)`
+- `sdk.bitmem.memory.add(...)`
+- `sdk.bitmem.profile.get(...)`
+- `sdk.bitmem.context.forTradePlan(...)`
 - local file mode for demos
 - HTTP adapter that can later be wrapped by MCP
 
 The key idea is one-call context before an agent takes action.
 
-## What 0G-Mem Does Differently
+## What BIT/MEM Does Differently
 
-0G-Mem is operational infrastructure for trading agents, not a general personal memory app.
+BIT/MEM is operational infrastructure for trading agents, not a general personal memory app.
 
 Differences:
 
@@ -53,5 +53,5 @@ Do not build:
 - a leaderboard for tracking other people's private agents
 - a demo trading bot
 
-Those would dilute the hackathon story. The sharp demo is: existing trading agents plug into 0G-Mem to remember, review, learn, and prove.
+Those would dilute the hackathon story. The sharp demo is: existing trading agents plug into BIT/MEM to remember, review, learn, and prove.
 

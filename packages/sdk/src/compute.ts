@@ -1,4 +1,4 @@
-import type { PrivateReasoning, ZeroGMemConfig } from "./types.js";
+import type { PrivateReasoning, BitMemConfig } from "./types.js";
 
 export type ComputePurpose = "risk_review" | "failure_reflection";
 
@@ -88,7 +88,7 @@ export class ZeroGComputeClient implements ComputeClient {
 }
 
 export function createComputeFromConfig(
-  compute: ZeroGMemConfig["compute"] = { provider: "local" }
+  compute: BitMemConfig["compute"] = { provider: "local" }
 ): ComputeClient {
   if (compute.provider === "local") {
     return new LocalComputeClient();

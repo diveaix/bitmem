@@ -3,9 +3,9 @@ import { MemoryClient } from "./memory.js";
 import { ProfileClient } from "./profile.js";
 import { InMemoryStorage, JsonFileStorage, type MemoryStorage } from "./storage.js";
 import { ZeroGStorageAdapter } from "./storage-0g.js";
-import type { ZeroGMemConfig } from "./types.js";
+import type { BitMemConfig } from "./types.js";
 
-export class ZeroGMemCore {
+export class BitMemCore {
   readonly memory: MemoryClient;
   readonly context: ContextClient;
   readonly profile: ProfileClient;
@@ -18,7 +18,7 @@ export class ZeroGMemCore {
 }
 
 export function createStorageFromConfig(
-  storage: ZeroGMemConfig["storage"] = { provider: "local" }
+  storage: BitMemConfig["storage"] = { provider: "local" }
 ): MemoryStorage {
   if (storage.provider === "file") {
     return new JsonFileStorage(storage.path);

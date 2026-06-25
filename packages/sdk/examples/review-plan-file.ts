@@ -4,7 +4,7 @@ import { createDemoSdk, fixturePath, readJsonFile } from "./shared.js";
 const planPath = process.argv[2] ?? fixturePath("risky-plan.json");
 const sdk = createDemoSdk();
 const plan = await readJsonFile<TradePlan>(planPath);
-const context = await sdk.ogmem.context.forTradePlan(plan);
+const context = await sdk.bitmem.context.forTradePlan(plan);
 const verdict = await sdk.aegis.risk.reviewPlan({ ...plan, context });
 const proof = await sdk.proofs.recordDecision({
   agentId: plan.agentId,

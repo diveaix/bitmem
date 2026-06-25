@@ -1,12 +1,12 @@
-# 0G-Mem SDK Hackathon Submission
+# BIT/MEM SDK Hackathon Submission
 
 ## One-Liner
 
-0G-Mem is a decentralized memory, risk, learning, and proof SDK for autonomous trading agents that already have their own strategy and execution systems.
+BIT/MEM is a decentralized memory, risk, learning, and proof SDK for autonomous trading agents that already have their own strategy and execution systems.
 
 ## What We Built
 
-0G-Mem gives trading agents the missing infrastructure around execution:
+BIT/MEM gives trading agents the missing infrastructure around execution:
 
 - persistent operational memory for skills, strategies, policies, trades, failures, feedback, and protocol profiles
 - Aegis pre-execution risk review for transaction plans
@@ -25,7 +25,7 @@ This is not a trading agent, copy-trading product, leaderboard, or mock bot. The
 
 Autonomous trading agents can produce technically valid transactions that are still unsafe for the owner, current strategy, or recent failure history. The missing layer is not more alpha. It is memory, safety, learning, and auditability.
 
-0G-Mem lets an agent ask:
+BIT/MEM lets an agent ask:
 
 1. What am I allowed to do?
 2. What went wrong before?
@@ -58,7 +58,7 @@ Source: https://docs.0g.ai/developer-hub/building-on-0g/contracts-on-0g/deploy-c
 
 ## Supermemory Check
 
-We inspected Supermemory because its API ergonomics are strong: `add`, `profile`, hybrid search, local mode, MCP tools, and one-call context retrieval. 0G-Mem borrows that developer shape, not the brand or consumer product.
+We inspected Supermemory because its API ergonomics are strong: `add`, `profile`, hybrid search, local mode, MCP tools, and one-call context retrieval. BIT/MEM borrows that developer shape, not the brand or consumer product.
 
 What we adopted:
 
@@ -116,16 +116,38 @@ Run individual demo steps:
 npm run example:seed
 npm run example:review-file
 npm run example:outcome
+npm run example:bitget
 ```
 
 ## Demo Story
 
 1. Seed the agent with policy and strategy memory.
 2. Submit a risky transaction plan from an external trading agent client.
-3. 0G-Mem retrieves relevant context.
+3. BIT/MEM retrieves relevant context.
 4. Aegis decodes the calldata and detects an unlimited approval to an unknown spender.
 5. The SDK returns `BLOCK`, stores a risk report, and records a proof hash.
 6. A failed outcome can be recorded later, producing a reusable failure lesson.
+
+## Bitget AI Hackathon Extension
+
+The same product now includes a Bitget AI Trading Infrastructure adapter.
+
+New module:
+
+```ts
+sdk.bitget
+```
+
+It supports:
+
+- Bitget market snapshot memory from Agent Hub / MCP / CLI outputs
+- Bitget account and futures position memory
+- Bitget tool-call audit memory
+- futures guardrail policies
+- deterministic review of proposed Bitget futures orders
+- safe default Codex MCP config for `bitget-mcp-server --read-only`
+
+This keeps the product honest for the Trading Infrastructure track: it is a data, risk, monitoring, memory, and audit layer around Bitget AI agents, not a rushed autonomous exchange executor.
 
 ## Current MVP Status
 
@@ -140,6 +162,7 @@ Done:
 - EVM calldata decoder
 - trade outcome recording
 - failure learning
+- Bitget Agent Hub infrastructure adapter
 - local and 0G Chain proof recorders
 - HTTP adapter
 - MCP server

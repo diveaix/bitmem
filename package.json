@@ -1,5 +1,5 @@
 {
-  "name": "0g-mem",
+  "name": "bit-mem",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,24 +10,25 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build -w @0g-mem/sdk && npm run build -w @0g-mem/api && npm run build -w @0g-mem/mcp && npm run build -w @0g-mem/backend && npm run build -w @0g-mem/web",
-    "build:backend": "npm run build -w @0g-mem/sdk && npm run build -w @0g-mem/api && npm run build -w @0g-mem/mcp && npm run build -w @0g-mem/backend",
-    "test": "npm run test -w @0g-mem/sdk && npm run test -w @0g-mem/api",
-    "backend:dev": "npm run dev -w @0g-mem/backend",
-    "backend:start": "npm run start -w @0g-mem/backend",
+    "build": "npm run build -w @bit-mem/sdk && npm run build -w @bit-mem/api && npm run build -w @bit-mem/mcp && npm run build -w @bit-mem/backend && npm run build -w @bit-mem/web",
+    "build:backend": "npm run build -w @bit-mem/sdk && npm run build -w @bit-mem/api && npm run build -w @bit-mem/mcp && npm run build -w @bit-mem/backend",
+    "test": "npm run test -w @bit-mem/sdk && npm run test -w @bit-mem/api",
+    "backend:dev": "npm run dev -w @bit-mem/backend",
+    "backend:start": "npm run start -w @bit-mem/backend",
     "api:dev": "tsx packages/api/src/server.ts",
     "api:smoke": "npm run build && tsx packages/api/examples/smoke.ts",
     "contracts:deploy:aegis": "node contracts/deploy-aegis.mjs",
     "mcp:dev": "tsx packages/mcp/src/server.ts",
     "mcp:http:dev": "tsx packages/mcp/src/http.ts",
-    "web:dev": "npm run dev -w @0g-mem/web",
-    "web:build": "npm run build -w @0g-mem/web",
-    "web:preview": "npm run preview -w @0g-mem/web",
+    "web:dev": "npm run dev -w @bit-mem/web",
+    "web:build": "npm run build -w @bit-mem/web",
+    "web:preview": "npm run preview -w @bit-mem/web",
     "example:review": "tsx packages/sdk/examples/review-plan.ts",
     "example:seed": "tsx packages/sdk/examples/seed-memory.ts",
     "example:review-file": "tsx packages/sdk/examples/review-plan-file.ts packages/sdk/examples/fixtures/risky-plan.json",
     "example:outcome": "tsx packages/sdk/examples/record-outcome.ts",
-    "example:flow": "tsx packages/sdk/examples/demo-flow.ts"
+    "example:flow": "tsx packages/sdk/examples/demo-flow.ts",
+    "example:bitget": "tsx packages/sdk/examples/bitget-infra-demo.ts"
   },
   "devDependencies": {
     "@types/node": "^22.13.14",

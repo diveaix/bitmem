@@ -73,7 +73,7 @@ export class InMemoryStorage implements MemoryStorage {
 }
 
 export class JsonFileStorage extends InMemoryStorage {
-  constructor(private readonly filePath = ".0g-mem/memory.json") {
+  constructor(private readonly filePath = ".bit-mem/memory.json") {
     super();
   }
 

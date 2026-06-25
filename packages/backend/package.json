@@ -1,5 +1,5 @@
 {
-  "name": "@0g-mem/backend",
+  "name": "@bit-mem/backend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,9 +10,9 @@
     "dev": "tsx src/server.ts"
   },
   "dependencies": {
-    "@0g-mem/api": "file:../api",
-    "@0g-mem/mcp": "file:../mcp",
-    "@0g-mem/sdk": "file:../sdk"
+    "@bit-mem/api": "file:../api",
+    "@bit-mem/mcp": "file:../mcp",
+    "@bit-mem/sdk": "file:../sdk"
   },
   "devDependencies": {
     "@types/node": "^22.13.14",

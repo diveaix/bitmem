@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { ZeroGMem } from "../src/index.js";
+import { BitMem } from "../src/index.js";
 
 describe("learning reflections", () => {
   it("stores a failure lesson with private reasoning metadata", async () => {
-    const sdk = new ZeroGMem();
+    const sdk = new BitMem();
 
     await sdk.trades.recordOutcome({
       agentId: "agent",

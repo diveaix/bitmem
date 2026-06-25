@@ -62,7 +62,7 @@ OG_STORAGE_PRIVATE_KEY=<funded-private-key>
 Use SDK config:
 
 ```ts
-const sdk = new ZeroGMem({
+const sdk = new BitMem({
   storage: {
     provider: "0g",
     indexerRpc: process.env.OG_STORAGE_INDEXER_RPC,
@@ -103,7 +103,7 @@ OG_CHAIN_PRIVATE_KEY=<funded-private-key>
 Use SDK config:
 
 ```ts
-const sdk = new ZeroGMem({
+const sdk = new BitMem({
   chain: {
     provider: "0g",
     rpcUrl: process.env.OG_EVM_RPC,

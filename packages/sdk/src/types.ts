@@ -136,7 +136,7 @@ export type ProofRecordResult = {
   decisionId?: string;
 };
 
-export type ZeroGMemConfig = {
+export type BitMemConfig = {
   agentId?: string;
   storage?: {
     provider: "local" | "file" | "0g";

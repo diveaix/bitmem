@@ -1,6 +1,6 @@
-import { ZeroGMem } from "../src/index.js";
+import { BitMem } from "../src/index.js";
 
-const mem = new ZeroGMem();
+const mem = new BitMem();
 
 const agentId = "trader-01";
 const token = "0x1111111111111111111111111111111111111111";

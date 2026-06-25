@@ -1,30 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { ZeroGMem } from "../src/index.js";
+import { BitMem } from "../src/index.js";
 
 describe("agent profile", () => {
   it("returns stable and dynamic agent memory in one call", async () => {
-    const sdk = new ZeroGMem();
+    const sdk = new BitMem();
 
-    await sdk.ogmem.memory.add({
+    await sdk.bitmem.memory.add({
       agentId: "agent",
       kind: "skill",
       title: "Swap",
       content: { description: "Can build swap plans" }
     });
-    await sdk.ogmem.memory.add({
+    await sdk.bitmem.memory.add({
       agentId: "agent",
       kind: "policy",
       title: "Conservative Policy",
       content: { maxTradeUsd: 500 }
     });
-    await sdk.ogmem.memory.add({
+    await sdk.bitmem.memory.add({
       agentId: "agent",
       kind: "failure_lesson",
       title: "Avoid unknown vaults",
       content: { lesson: "Unknown vaults require human review" }
     });
 
-    const profile = await sdk.ogmem.profile.get({
+    const profile = await sdk.bitmem.profile.get({
       agentId: "agent",
       query: "vaults"
     });

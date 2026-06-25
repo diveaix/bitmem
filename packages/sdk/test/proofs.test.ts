@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   AEGIS_PROOF_REGISTRY_ABI,
   ProofsClient,
-  ZeroGMem,
+  BitMem,
   createProofRecorderFromConfig
 } from "../src/index.js";
 
@@ -23,7 +23,7 @@ describe("proof recording", () => {
   });
 
   it("is wired through the SDK facade", async () => {
-    const sdk = new ZeroGMem();
+    const sdk = new BitMem();
 
     const result = await sdk.proofs.recordDecision({
       agentId: "agent-01",

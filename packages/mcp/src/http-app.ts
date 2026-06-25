@@ -1,23 +1,23 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { create0GMemMcpServer } from "./create-server.js";
+import { createBitMemMcpServer } from "./create-server.js";
 
 type McpHttpRequest = IncomingMessage & { body?: unknown };
 type McpHttpResponse = ServerResponse;
 
-export type Create0GMemMcpHttpAppOptions = {
+export type CreateBitMemMcpHttpAppOptions = {
   apiBaseUrl?: string;
 };
 
-export function create0GMemMcpHttpApp(options: Create0GMemMcpHttpAppOptions = {}) {
+export function createBitMemMcpHttpApp(options: CreateBitMemMcpHttpAppOptions = {}) {
   const apiBaseUrl =
     options.apiBaseUrl ??
-    process.env.OGMEM_API_URL ??
-    process.env.OG_MEM_API_URL ??
+    process.env.BITMEM_API_URL ??
+    process.env.BIT_MEM_API_URL ??
     "http://127.0.0.1:8787";
   const app = createMcpExpressApp({
-    host: process.env.OG_MEM_MCP_HOST ?? "0.0.0.0",
+    host: process.env.BIT_MEM_MCP_HOST ?? "0.0.0.0",
     allowedHosts: allowedHosts(apiBaseUrl)
   });
 
@@ -28,14 +28,14 @@ export function create0GMemMcpHttpApp(options: Create0GMemMcpHttpAppOptions = {}
 
   app.post("/mcp", async (req: McpHttpRequest, res: McpHttpResponse) => {
     setCorsHeaders(res);
-    const apiKey = readBearerToken(req) ?? process.env.OGMEM_API_KEY ?? process.env.OG_MEM_API_KEY;
+    const apiKey = readBearerToken(req) ?? process.env.BITMEM_API_KEY ?? process.env.BIT_MEM_API_KEY;
 
     if (!apiKey) {
-      sendJsonRpcError(res, 401, -32001, "Missing bearer token. Use an 0G-Mem API key.");
+      sendJsonRpcError(res, 401, -32001, "Missing bearer token. Use an BIT/MEM API key.");
       return;
     }
 
-    const server = create0GMemMcpServer({
+    const server = createBitMemMcpServer({
       apiBaseUrl,
       apiKey,
       allowLocalFallback: false
@@ -52,7 +52,7 @@ export function create0GMemMcpHttpApp(options: Create0GMemMcpHttpAppOptions = {}
         void server.close();
       });
     } catch (error) {
-      console.error("Error handling 0G-Mem MCP request:", error);
+      console.error("Error handling BIT/MEM MCP request:", error);
       if (!res.headersSent) {
         sendJsonRpcError(res, 500, -32603, "Internal server error");
       }
@@ -79,7 +79,7 @@ function allowedHosts(apiBaseUrl: string) {
   if (process.env.RAILWAY_PUBLIC_DOMAIN) {
     hosts.add(process.env.RAILWAY_PUBLIC_DOMAIN);
   }
-  for (const host of (process.env.OG_MEM_MCP_ALLOWED_HOSTS ?? "").split(",")) {
+  for (const host of (process.env.BIT_MEM_MCP_ALLOWED_HOSTS ?? "").split(",")) {
     const trimmed = host.trim();
     if (trimmed) hosts.add(trimmed);
   }
@@ -91,7 +91,7 @@ function addUrlHost(hosts: Set<string>, value: string) {
   try {
     hosts.add(new URL(value).hostname);
   } catch {
-    // Ignore non-URL values; explicit hosts can still be set through OG_MEM_MCP_ALLOWED_HOSTS.
+    // Ignore non-URL values; explicit hosts can still be set through BIT_MEM_MCP_ALLOWED_HOSTS.
   }
 }
 

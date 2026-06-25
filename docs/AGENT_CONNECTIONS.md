@@ -1,6 +1,6 @@
 # Agent Connection Guide
 
-0G-Mem is not the trading agent. It is the memory, risk, learning, and proof layer that a trading agent calls before and after execution.
+BIT/MEM is not the trading agent. It is the memory, risk, learning, and proof layer that a trading agent calls before and after execution.
 
 Agents can connect in three ways. In hosted/API mode, every request must be tied
 to a verified user through an API key.
@@ -18,17 +18,17 @@ Dashboard flow:
 2. Enter email.
 3. Open the confirmation link.
 4. Create an API key.
-5. Put that key in the agent runtime as `OGMEM_API_KEY`.
+5. Put that key in the agent runtime as `BITMEM_API_KEY`.
 
 ## 1. TypeScript SDK
 
 Best for agents running in Node.js or a TypeScript service.
 
 ```ts
-import { ZeroGMemApiClient } from "@0g-mem/sdk";
+import { BitMemApiClient } from "@bit-mem/sdk";
 
-const client = new ZeroGMemApiClient({
-  apiKey: process.env.OGMEM_API_KEY!,
+const client = new BitMemApiClient({
+  apiKey: process.env.BITMEM_API_KEY!,
   baseUrl: "http://127.0.0.1:8787"
 });
 
@@ -41,7 +41,7 @@ if (review.verdict.decision === "BLOCK") {
 }
 ```
 
-The agent keeps its own wallet, executor, strategy, and market data. It calls 0G-Mem before execution and records outcomes afterward.
+The agent keeps its own wallet, executor, strategy, and market data. It calls BIT/MEM before execution and records outcomes afterward.
 
 ## 2. REST API
 
@@ -69,7 +69,7 @@ Minimal review request:
 
 ```bash
 curl -X POST http://127.0.0.1:8787/v1/review-plan \
-  -H "Authorization: Bearer $OGMEM_API_KEY" \
+  -H "Authorization: Bearer $BITMEM_API_KEY" \
   -H "Content-Type: application/json" \
   --data @packages/sdk/examples/fixtures/risky-plan.json
 ```
@@ -97,22 +97,22 @@ http://127.0.0.1:8788/mcp
 Hosted URL shape:
 
 ```text
-https://0gmem-backend-production.up.railway.app/mcp
+https://bit-mem-backend-production.up.railway.app/mcp
 ```
 
 The MCP server reads the user or agent API key from `Authorization: Bearer ...`.
 In clients such as Codex, set the bearer token environment variable to
-`OGMEM_API_KEY`, then put the actual key in that environment variable.
+`BITMEM_API_KEY`, then put the actual key in that environment variable.
 
 Available MCP tools:
 
 ```text
-0gmem_add_memory
-0gmem_get_profile
-0gmem_context_for_trade_plan
+bitmem_add_memory
+bitmem_get_profile
+bitmem_context_for_trade_plan
 aegis_review_plan
-0gmem_record_outcome
-0gmem_reflect_failure
+bitmem_record_outcome
+bitmem_reflect_failure
 ```
 
 Example Streamable HTTP MCP client config:
@@ -120,10 +120,10 @@ Example Streamable HTTP MCP client config:
 ```json
 {
   "mcpServers": {
-    "0gmem": {
+    "bitmem": {
       "type": "streamable-http",
-      "url": "https://0gmem-backend-production.up.railway.app/mcp",
-      "bearerTokenEnvVar": "OGMEM_API_KEY"
+      "url": "https://bit-mem-backend-production.up.railway.app/mcp",
+      "bearerTokenEnvVar": "BITMEM_API_KEY"
     }
   }
 }
@@ -132,7 +132,7 @@ Example Streamable HTTP MCP client config:
 Optional local stdio fallback:
 
 ```bash
-OGMEM_API_KEY=ogm_live_... npm run mcp:dev
+BITMEM_API_KEY=bitmem_live_... npm run mcp:dev
 ```
 
 The stdio server can fall back to local file memory for offline demos. The
@@ -144,7 +144,7 @@ API-key scoped workspace data.
 1. Agent prepares a transaction plan.
 2. Agent calls `profile` or `context`.
 3. Agent calls Aegis risk review.
-4. 0G-Mem returns `ALLOW`, `WARN`, `BLOCK`, or `REQUIRE_HUMAN`.
+4. BIT/MEM returns `ALLOW`, `WARN`, `BLOCK`, or `REQUIRE_HUMAN`.
 5. Agent executes only when its own policy allows it.
 6. Agent records outcome.
 7. Failure lessons become future memory.

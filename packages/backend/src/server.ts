@@ -2,26 +2,26 @@
 import { existsSync, readFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { resolve } from "node:path";
-import { create0GMemApi } from "@0g-mem/api";
-import { create0GMemMcpHttpApp } from "@0g-mem/mcp/http-app";
-import type { ZeroGMemConfig } from "@0g-mem/sdk";
+import { createBitMemApi } from "@bit-mem/api";
+import { createBitMemMcpHttpApp } from "@bit-mem/mcp/http-app";
+import type { BitMemConfig } from "@bit-mem/sdk";
 
 loadEnvFile();
 
 const port = Number(process.env.PORT ?? "8787");
 const apiBaseUrl = publicApiBaseUrl();
-const memoryPath = process.env.OG_MEM_API_MEMORY_PATH ?? ".0g-mem/api-memory.json";
+const memoryPath = process.env.BIT_MEM_API_MEMORY_PATH ?? ".bit-mem/api-memory.json";
 const config = createConfigFromEnv();
 
-const apiServer = create0GMemApi({
+const apiServer = createBitMemApi({
   config,
   memoryPath,
   auth: {
-    appUrl: process.env.OG_MEM_APP_URL,
-    returnDevVerificationToken: process.env.OG_MEM_RETURN_DEV_TOKENS !== "false"
+    appUrl: process.env.BIT_MEM_APP_URL,
+    returnDevVerificationToken: process.env.BIT_MEM_RETURN_DEV_TOKENS !== "false"
   }
 });
-const mcpApp = create0GMemMcpHttpApp({ apiBaseUrl });
+const mcpApp = createBitMemMcpHttpApp({ apiBaseUrl });
 
 const server = createServer((request, response) => {
   const url = request.url ?? "/";
@@ -30,7 +30,7 @@ const server = createServer((request, response) => {
     response.writeHead(200, { "Content-Type": "application/json" });
     response.end(JSON.stringify({
       ok: true,
-      service: "0g-mem-backend",
+      service: "bit-mem-backend",
       rest: "/v1",
       mcp: "/mcp",
       apiBaseUrl
@@ -47,7 +47,7 @@ const server = createServer((request, response) => {
 });
 
 server.listen(port, () => {
-  console.log(`0G-Mem backend listening on port ${port}`);
+  console.log(`BIT/MEM backend listening on port ${port}`);
   console.log(`REST API available at ${apiBaseUrl}/v1`);
   console.log(`Streamable HTTP MCP available at ${apiBaseUrl}/mcp`);
   if (config.chain?.provider === "0g") {
@@ -56,8 +56,8 @@ server.listen(port, () => {
 });
 
 function publicApiBaseUrl() {
-  if (process.env.OGMEM_API_URL) return process.env.OGMEM_API_URL.replace(/\/$/, "");
-  if (process.env.OG_MEM_API_URL) return process.env.OG_MEM_API_URL.replace(/\/$/, "");
+  if (process.env.BITMEM_API_URL) return process.env.BITMEM_API_URL.replace(/\/$/, "");
+  if (process.env.BIT_MEM_API_URL) return process.env.BIT_MEM_API_URL.replace(/\/$/, "");
   if (process.env.RAILWAY_PUBLIC_DOMAIN) {
     return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
   }
@@ -89,8 +89,8 @@ function unquoteEnvValue(value: string) {
   return value;
 }
 
-function createConfigFromEnv(): ZeroGMemConfig {
-  const config: ZeroGMemConfig = {};
+function createConfigFromEnv(): BitMemConfig {
+  const config: BitMemConfig = {};
 
   if (
     process.env.OG_EVM_RPC &&

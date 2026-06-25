@@ -7,10 +7,10 @@ const policy = await readJsonFile<MemoryInput>(fixturePath("policy.json"));
 const strategy = await readJsonFile<MemoryInput>(fixturePath("strategy.json"));
 const plan = await readJsonFile<TradePlan>(fixturePath("risky-plan.json"));
 
-await sdk.ogmem.memory.add(policy);
-await sdk.ogmem.memory.add(strategy);
+await sdk.bitmem.memory.add(policy);
+await sdk.bitmem.memory.add(strategy);
 
-const context = await sdk.ogmem.context.forTradePlan(plan);
+const context = await sdk.bitmem.context.forTradePlan(plan);
 const verdict = await sdk.aegis.risk.reviewPlan({ ...plan, context });
 const proof = await sdk.proofs.recordDecision({
   agentId: plan.agentId,
@@ -22,7 +22,7 @@ const proof = await sdk.proofs.recordDecision({
 console.log(
   JSON.stringify(
     {
-      memoryPath: ".0g-mem/demo-memory.json",
+      memoryPath: ".bit-mem/demo-memory.json",
       matchedMemories: verdict.matchedMemories,
       verdict,
       proof

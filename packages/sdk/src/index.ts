@@ -1,12 +1,17 @@
-export { ZeroGMem } from "./client.js";
-export { ZeroGMemApiClient } from "./api-client.js";
+export { BitMem } from "./client.js";
+export { BitMemApiClient } from "./api-client.js";
 export { AegisModule } from "./aegis.js";
+export {
+  BitgetInfraClient,
+  createBitgetMcpCodexConfig,
+  defaultBitgetFuturesPolicy
+} from "./bitget.js";
 export {
   LocalComputeClient,
   ZeroGComputeClient,
   createComputeFromConfig
 } from "./compute.js";
-export { ZeroGMemCore, createStorageFromConfig } from "./ogmem.js";
+export { BitMemCore, createStorageFromConfig } from "./bitmem.js";
 export { InMemoryStorage, JsonFileStorage, createMemoryRecord } from "./storage.js";
 export { ZeroGStorageAdapter, createZeroGStorageAdapter } from "./storage-0g.js";
 export { MemoryClient } from "./memory.js";
@@ -25,6 +30,21 @@ export {
   createProofRecorderFromConfig
 } from "./proofs.js";
 export type {
+  BitgetFuturesGuardrailPolicy,
+  BitgetFuturesGuardrailPolicyInput,
+  BitgetFuturesOrderIntentInput,
+  BitgetMarketSnapshotInput,
+  BitgetMcpConfigInput,
+  BitgetMcpModule,
+  BitgetObservationSource,
+  BitgetOrderRiskVerdict,
+  BitgetPosition,
+  BitgetPositionSnapshotInput,
+  BitgetProductType,
+  BitgetToolObservationInput,
+  BitgetToolRisk
+} from "./bitget.js";
+export type {
   ContextResult,
   AgentProfile,
   DecodedActionKind,
@@ -41,6 +61,6 @@ export type {
   ProofRecordResult,
   TradePlan,
   TransactionRequest,
-  ZeroGMemConfig
+  BitMemConfig
 } from "./types.js";
-export type { ReviewPlanResult, ZeroGMemApiClientConfig } from "./api-client.js";
+export type { ReviewPlanResult, BitMemApiClientConfig } from "./api-client.js";

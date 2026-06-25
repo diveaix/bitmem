@@ -1,35 +1,58 @@
-# 0G-Mem
+# BIT/MEM
 
 **Memory, risk review, learning, and proof infrastructure for AI trading agents.**
 
-0G-Mem is not a trading bot. It is the layer that existing trading agents call before and after they act. Agents keep their own strategy, wallet, market data, and execution system. 0G-Mem gives them persistent memory, pre-execution safety review, failure learning, API-key scoped access, MCP tools, and 0G proof anchoring.
+BIT/MEM is not a trading bot. It is the layer that existing trading agents call before and after they act. Agents keep their own strategy, wallet, market data, and execution system. BIT/MEM gives them persistent memory, pre-execution safety review, failure learning, API-key scoped access, MCP tools, and 0G proof anchoring.
 
 Built for the 0G hackathon.
 
-![0G-Mem memory map](packages/web/public/assets/minimal-memory-map.png)
+![BIT/MEM memory map](packages/web/public/assets/minimal-memory-map.png)
+
+## Bitget AI Hackathon Add-On
+
+This repo now includes a Bitget AI Trading Infrastructure adapter for the same product.
+
+The new `sdk.bitget` module lets Bitget Agent Hub / MCP / CLI workflows write market snapshots, position snapshots, and tool-call observations into BIT/MEM, then review proposed Bitget futures orders against guardrails before execution.
+
+Best submission angle for Bitget Track 2:
+
+```text
+BIT/MEM x Bitget Agent Hub: memory-backed risk and audit infrastructure for Bitget AI trading agents.
+```
+
+Start with:
+
+```bash
+npm run example:bitget
+```
+
+Details:
+
+- `docs/BITGET_AI_TRACK.md`
+- `BITGET_SUBMISSION.md`
 
 ## Live Backend
 
 The public Railway backend exposes REST and Streamable HTTP MCP on one domain:
 
 ```text
-REST API: https://0gmem-backend-production.up.railway.app/v1
-MCP URL:  https://0gmem-backend-production.up.railway.app/mcp
-Health:   https://0gmem-backend-production.up.railway.app/health
+REST API: https://bit-mem-backend-production.up.railway.app/v1
+MCP URL:  https://bit-mem-backend-production.up.railway.app/mcp
+Health:   https://bit-mem-backend-production.up.railway.app/health
 ```
 
-SDK clients should use `baseUrl: "https://0gmem-backend-production.up.railway.app"`.
+SDK clients should use `baseUrl: "https://bit-mem-backend-production.up.railway.app"`.
 MCP clients should use the `/mcp` URL with the agent API key as the bearer token.
 
 ## What This Website Can Do
 
-The web app is the operator control plane for 0G-Mem.
+The web app is the operator control plane for BIT/MEM.
 
 ### Landing Page
 
 The landing page explains the product boundary clearly:
 
-- 0G-Mem is infrastructure for agents, not an auto-trading agent.
+- BIT/MEM is infrastructure for agents, not an auto-trading agent.
 - It provides memory, safety, learning, and proof.
 - It shows how SDK, API, MCP, 0G Storage, 0G Compute, and 0G Chain fit together.
 - It gives judges and developers the product story without needing to read code first.
@@ -73,7 +96,7 @@ Why this matters: the API has to know whose memory belongs to whom. Dashboard us
 
 ### Connect Page
 
-The Connect page shows how real agents integrate with 0G-Mem.
+The Connect page shows how real agents integrate with BIT/MEM.
 
 It can:
 
@@ -99,7 +122,7 @@ In dev mode, requesting login returns a confirmation link that can be opened imm
 
 ## What Agents Get
 
-Agents can use 0G-Mem through three integration paths:
+Agents can use BIT/MEM through three integration paths:
 
 | Path | Best For | What It Does |
 | --- | --- | --- |
@@ -109,7 +132,7 @@ Agents can use 0G-Mem through three integration paths:
 
 ## Product Boundary
 
-0G-Mem is:
+BIT/MEM is:
 
 - an SDK for existing AI trading agents
 - a memory layer for skills, strategies, policies, trades, and failures
@@ -118,7 +141,7 @@ Agents can use 0G-Mem through three integration paths:
 - a proof layer for decisions and reports
 - an operator dashboard for visibility and access management
 
-0G-Mem is not:
+BIT/MEM is not:
 
 - a trading agent
 - a strategy engine
@@ -135,7 +158,7 @@ Existing Trading Agent
   |
   | 1. saves strategy, policy, skills, and prior outcomes
   v
-0G-Mem Memory
+BIT/MEM Memory
   |
   | 2. retrieves context before a transaction plan
   v
@@ -151,27 +174,28 @@ Agent Executor or Human Review
   |
   | 4. records outcome, failures, and lessons
   v
-0G-Mem Learning + Proofs
+BIT/MEM Learning + Proofs
 ```
 
 ## Core Modules
 
 | Module | Purpose |
 | --- | --- |
-| `ogmem.memory` | Add and search structured memories |
-| `ogmem.context` | Retrieve relevant memories before a trade plan |
-| `ogmem.profile` | Return stable agent profile plus dynamic context |
+| `bitmem.memory` | Add and search structured memories |
+| `bitmem.context` | Retrieve relevant memories before a trade plan |
+| `bitmem.profile` | Return stable agent profile plus dynamic context |
 | `aegis.risk` | Review transaction plans before execution |
 | `trades` | Record executed, failed, reverted, or skipped outcomes |
 | `learning` | Reflect on failures and store lessons |
 | `proofs` | Generate local proofs or anchor decisions on 0G Chain |
-| `ZeroGMemApiClient` | Use the hosted/local API through agent API keys |
-| `mcp` | Expose 0G-Mem as tools to LLM agents |
+| `bitget` | Ingest Bitget Agent Hub observations and review proposed Bitget futures orders |
+| `BitMemApiClient` | Use the hosted/local API through agent API keys |
+| `mcp` | Expose BIT/MEM as tools to LLM agents |
 | `web` | Operator UI for dashboard, API keys, and connections |
 
 ## Memory Types
 
-0G-Mem stores the kinds of context an autonomous trading agent needs before it touches money:
+BIT/MEM stores the kinds of context an autonomous trading agent needs before it touches money:
 
 - `agent_profile`
 - `skill`
@@ -226,7 +250,7 @@ Local/file mode keeps the hackathon demo easy to run. The storage adapter is whe
 
 ### 0G Compute Router / Private Computer Direction
 
-0G-Mem uses 0G Compute Router as the private reasoning interface when `OG_COMPUTE_API_KEY` is configured.
+BIT/MEM uses 0G Compute Router as the private reasoning interface when `OG_COMPUTE_API_KEY` is configured.
 
 Used for:
 
@@ -283,7 +307,7 @@ npm run api:dev
 Expected output:
 
 ```text
-0G-Mem API listening on http://localhost:8787
+BIT/MEM API listening on http://localhost:8787
 0G proof registry enabled at 0xCbc3AE7d33c2F6E2600E0F9E3fE1610DD84E14A5
 ```
 
@@ -332,17 +356,17 @@ OG_COMPUTE_MODEL=zai-org/GLM-5-FP8
 AEGIS_REGISTRY_ADDRESS=0xCbc3AE7d33c2F6E2600E0F9E3fE1610DD84E14A5
 OG_CHAIN_PRIVATE_KEY=
 
-OG_MEM_APP_URL=http://127.0.0.1:5173
-OG_MEM_API_MEMORY_PATH=.0g-mem/api-memory.json
-OG_MEM_API_AUTH_PATH=.0g-mem/auth.json
+BIT_MEM_APP_URL=http://127.0.0.1:5173
+BIT_MEM_API_MEMORY_PATH=.bit-mem/api-memory.json
+BIT_MEM_API_AUTH_PATH=.bit-mem/auth.json
 ```
 
 ## SDK Usage
 
 ```ts
-import { ZeroGMem } from "@0g-mem/sdk";
+import { BitMem } from "@bit-mem/sdk";
 
-const mem = new ZeroGMem();
+const mem = new BitMem();
 
 await mem.memory.add({
   agentId: "agent-risk-03",
@@ -378,10 +402,10 @@ if (verdict.decision !== "ALLOW") {
 Create an API key at `/#api-keys`, then use it from an agent runtime.
 
 ```ts
-import { ZeroGMemApiClient } from "@0g-mem/sdk";
+import { BitMemApiClient } from "@bit-mem/sdk";
 
-const client = new ZeroGMemApiClient({
-  apiKey: process.env.OGMEM_API_KEY,
+const client = new BitMemApiClient({
+  apiKey: process.env.BITMEM_API_KEY,
   baseUrl: "http://127.0.0.1:8787"
 });
 
@@ -409,7 +433,7 @@ The API is available at `http://127.0.0.1:8787`.
 Authenticated agent routes accept:
 
 ```text
-Authorization: Bearer ogm_live_...
+Authorization: Bearer bitmem_live_...
 ```
 
 Routes:
@@ -449,33 +473,33 @@ Codex, Claude, or any Streamable HTTP MCP client should use:
 
 ```json
 {
-  "name": "0gmem",
+  "name": "bitmem",
   "type": "streamable-http",
   "url": "http://127.0.0.1:8788/mcp",
-  "bearerTokenEnvVar": "OGMEM_API_KEY"
+  "bearerTokenEnvVar": "BITMEM_API_KEY"
 }
 ```
 
 The bearer token is the agent API key created in the dashboard. The MCP server
-expects `Authorization: Bearer <0G-Mem API key>` and writes to that authenticated
+expects `Authorization: Bearer <BIT/MEM API key>` and writes to that authenticated
 workspace.
 
 For public demos, host the API/MCP backend and use its HTTPS endpoint:
 
 ```text
-https://0gmem-backend-production.up.railway.app/mcp
+https://bit-mem-backend-production.up.railway.app/mcp
 ```
 
 Tools exposed:
 
 | Tool | Purpose |
 | --- | --- |
-| `0gmem_add_memory` | Store policy, strategy, trade, feedback, protocol, risk, or lesson memory |
-| `0gmem_get_profile` | Return stable profile plus recent dynamic memory |
-| `0gmem_context_for_trade_plan` | Retrieve context before risk review |
+| `bitmem_add_memory` | Store policy, strategy, trade, feedback, protocol, risk, or lesson memory |
+| `bitmem_get_profile` | Return stable profile plus recent dynamic memory |
+| `bitmem_context_for_trade_plan` | Retrieve context before risk review |
 | `aegis_review_plan` | Return ALLOW, WARN, BLOCK, or REQUIRE_HUMAN |
-| `0gmem_record_outcome` | Record executed, failed, reverted, or skipped outcomes |
-| `0gmem_reflect_failure` | Create a failure lesson from outcome and context |
+| `bitmem_record_outcome` | Record executed, failed, reverted, or skipped outcomes |
+| `bitmem_reflect_failure` | Create a failure lesson from outcome and context |
 
 ## Demo Commands
 
@@ -485,6 +509,7 @@ npm run example:review
 npm run example:review-file
 npm run example:outcome
 npm run example:flow
+npm run example:bitget
 npm run api:smoke
 ```
 
@@ -500,6 +525,14 @@ Demo story:
 8. Anchor proof on 0G Chain when chain credentials are configured.
 9. Record outcome.
 10. Reflect on failure and store a future lesson.
+
+Bitget demo story:
+
+1. Create a Bitget futures guardrail policy.
+2. Store Bitget-style ticker, funding, open-interest, account, and position snapshots.
+3. Review a proposed Bitget futures order.
+4. Return `ALLOW`, `WARN`, `BLOCK`, or `REQUIRE_HUMAN`.
+5. Store the report as future memory for audit and replay.
 
 ## Repository Structure
 
@@ -523,6 +556,7 @@ packages/
     src/server.ts
   sdk/
     src/api-client.ts
+    src/bitget.ts
     src/client.ts
     src/compute.ts
     src/context.ts
@@ -561,9 +595,9 @@ packages/
 
 ## Security Notes
 
-- 0G-Mem does not execute trades.
-- 0G-Mem does not custody funds.
-- 0G-Mem does not require agent wallet private keys.
+- BIT/MEM does not execute trades.
+- BIT/MEM does not custody funds.
+- BIT/MEM does not require agent wallet private keys.
 - API key secrets are shown once and stored as hashes.
 - The chain proof wallet is only used by the API/server proof recorder.
 - Agents should keep one key per runtime so access can be revoked cleanly.

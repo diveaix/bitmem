@@ -1,4 +1,4 @@
-# 0G-Mem Demo Script
+# BIT/MEM Demo Script
 
 ## Setup
 
@@ -32,7 +32,7 @@ npm run api:dev
 
 Say:
 
-0G-Mem is not a trading agent. It is the memory, safety, learning, and proof SDK that trading agents call before and after execution.
+BIT/MEM is not a trading agent. It is the memory, safety, learning, and proof SDK that trading agents call before and after execution.
 
 ### 2. Seed Agent Memory
 
@@ -92,7 +92,7 @@ npm run mcp:http:dev
 
 Point out:
 
-- LLM agents can call 0G-Mem through one Streamable HTTP URL instead of importing TypeScript
+- LLM agents can call BIT/MEM through one Streamable HTTP URL instead of importing TypeScript
 - the MCP server uses the same SDK under the hood
 - clients pass the agent API key as a bearer token
 - available tools include memory, profile, context, review, outcome, and reflection
@@ -116,7 +116,7 @@ Point out:
 
 Trading agents do not need another demo bot. They need infrastructure that makes existing agents safer, more persistent, and auditable.
 
-0G-Mem uses 0G where it matters:
+BIT/MEM uses 0G where it matters:
 
 - 0G Storage for persistent decentralized memory
 - 0G Compute Router / Private Computer for private risk reasoning

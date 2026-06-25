@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   Braces,
   Brain,
+  CandlestickChart,
   Cpu,
   Database,
   GitBranch,
@@ -51,7 +52,7 @@ export type MemoryNode = {
 };
 
 export type ConnectionMethod = {
-  id: "sdk" | "api" | "mcp";
+  id: "sdk" | "api" | "mcp" | "bitget";
   title: string;
   subtitle: string;
   icon: LucideIcon;
@@ -79,20 +80,20 @@ export const sourceMeta: Record<
 > = {
   SDK: {
     label: "SDK",
-    color: "#2563eb",
-    soft: "rgba(37, 99, 235, 0.08)",
+    color: "#7c3aed",
+    soft: "rgba(124, 58, 237, 0.08)",
     detail: "native agent runtime"
   },
   MCP: {
     label: "MCP",
-    color: "#7c3aed",
-    soft: "rgba(124, 58, 237, 0.08)",
+    color: "#9333ea",
+    soft: "rgba(147, 51, 234, 0.08)",
     detail: "tool call from an LLM agent"
   },
   API: {
     label: "API",
-    color: "#0891b2",
-    soft: "rgba(8, 145, 178, 0.08)",
+    color: "#a855f7",
+    soft: "rgba(168, 85, 247, 0.08)",
     detail: "HTTP service or worker"
   },
   Manual: {
@@ -104,30 +105,30 @@ export const sourceMeta: Record<
 };
 
 export const agentOptions = [
-  { id: "agent-arb-01", name: "Arb Sentinel" },
-  { id: "agent-yield-02", name: "Yield Steward" },
-  { id: "agent-risk-03", name: "Policy Keeper" }
+  { id: "agent-bitget-01", name: "Bitget Sentinel" },
+  { id: "agent-futures-02", name: "Futures Guard" },
+  { id: "agent-market-03", name: "Market Memory" }
 ];
 
 export const stackItems = [
   {
     title: "0G Storage",
-    detail: "Durable memory artifacts: strategies, trade outcomes, failures, policy files, and agent profiles.",
+    detail: "Durable Bitget snapshots, guardrail policies, order reviews, outcomes, and agent profiles.",
     icon: Database
   },
   {
     title: "0G Compute",
-    detail: "Private reasoning path for explanations, failure reflection, and policy summaries.",
+    detail: "Private reasoning path for risk explanations, blocked-order reflection, and policy summaries.",
     icon: Cpu
   },
   {
     title: "0G Chain",
-    detail: "Compact proof hashes for review decisions, report integrity, and memory provenance.",
+    detail: "Compact proof hashes for guardrail decisions, report integrity, and memory provenance.",
     icon: KeyRound
   },
   {
-    title: "Agent interfaces",
-    detail: "SDK, MCP, and REST entry points so teams can connect the agents they already run.",
+    title: "Bitget Agent Hub",
+    detail: "Read-only Bitget MCP plus SDK, REST, and BIT/MEM MCP entry points for agent workflows.",
     icon: TerminalSquare
   }
 ];
@@ -136,51 +137,63 @@ export const connectionMethods: ConnectionMethod[] = [
   {
     id: "sdk",
     title: "TypeScript SDK",
-    subtitle: "Best for agents already running in Node or a TypeScript execution service.",
+    subtitle: "Best for teams wrapping Bitget Agent Hub from Node or a TypeScript execution service.",
     icon: Braces,
-    command: "npm install @0g-mem/sdk",
+    command: "npm install @bit-mem/sdk",
     bullets: [
-      "Add memories from the agent runtime",
-      "Fetch profile and context before a trade plan",
-      "Record outcomes and failure lessons after execution"
+      "Write Bitget snapshots and guardrails from the agent runtime",
+      "Fetch policy and context before a futures order handoff",
+      "Record outcomes, blocked actions, and review reports"
     ]
   },
   {
     id: "mcp",
     title: "Streamable HTTP MCP",
-    subtitle: "Best for Codex, Claude, and LLM agents that connect through a hosted MCP URL.",
+    subtitle: "Best for Codex, Claude, and LLM agents that need BIT/MEM tools beside Bitget tools.",
     icon: Plug,
-    command: "https://0gmem-backend-production.up.railway.app/mcp",
+    command: "https://bit-mem-backend-production.up.railway.app/mcp",
     bullets: [
       "Paste one HTTPS URL into the MCP client",
       "Use the agent API key as the bearer token",
-      "Expose memory, context, review, outcomes, and reflection tools"
+      "Expose memory, context, guardrail review, outcomes, and reflection tools"
     ]
   },
   {
     id: "api",
     title: "REST API",
-    subtitle: "Best for Python agents, workers, notebooks, and hosted services.",
+    subtitle: "Best for Python agents, monitoring workers, notebooks, and hosted risk services.",
     icon: Link2,
-    command: "https://0gmem-backend-production.up.railway.app/v1",
+    command: "https://bit-mem-backend-production.up.railway.app/v1",
     bullets: [
       "POST /memory",
       "GET /profile and POST /context",
       "POST /review-plan and POST /learning/reflect"
     ]
+  },
+  {
+    id: "bitget",
+    title: "Bitget Agent Hub",
+    subtitle: "Best for Bitget AI agents that need read-only market context, futures guardrails, and audit memory.",
+    icon: CandlestickChart,
+    command: "npx -y bitget-mcp-server --modules spot,futures,account --read-only",
+    bullets: [
+      "Ingest Bitget ticker, funding, open-interest, account, and position snapshots",
+      "Review futures order intents against guardrails before execution",
+      "Keep write/trade workflows behind explicit human confirmation"
+    ]
   }
 ];
 
 export const demoPlan = {
-  agentId: "agent-risk-03",
-  intent: "Approve USDC before depositing into a vault",
+  agentId: "agent-bitget-01",
+  intent: "Review sample approval before Bitget handoff",
   txs: [
     {
       chainId: 16602,
       to: "0x1111111111111111111111111111111111111111",
       data: "0x095ea7b30000000000000000000000002222222222222222222222222222222222222222ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       value: "0",
-      label: "Unlimited USDC approval to unknown spender"
+      label: "Sample blocked approval for guardrail demo"
     }
   ],
   metadata: { source: "web-dashboard-demo" }
@@ -188,18 +201,18 @@ export const demoPlan = {
 
 export const productPillars = [
   {
-    title: "Memory before action",
-    body: "The agent retrieves its own history, policy, skills, prior trades, and failures before it proposes transactions.",
+    title: "Bitget memory before action",
+    body: "The agent retrieves market snapshots, futures exposure, guardrails, prior reviews, and blocked actions before an order handoff.",
     icon: Database
   },
   {
-    title: "Safety around execution",
-    body: "Aegis reviews plans and returns ALLOW, WARN, BLOCK, or REQUIRE_HUMAN without becoming the trading agent.",
+    title: "Guardrails around execution",
+    body: "Aegis reviews Bitget futures order intents and returns ALLOW, WARN, BLOCK, or REQUIRE_HUMAN without placing trades itself.",
     icon: ShieldCheck
   },
   {
-    title: "Learning after outcomes",
-    body: "Failures and wins are stored as reusable lessons so future plans start from evidence, not amnesia.",
+    title: "Audit after outcomes",
+    body: "Blocked actions, handoffs, failures, and human feedback are stored as reusable evidence for future Bitget reviews.",
     icon: GitBranch
   }
 ];
@@ -220,24 +233,24 @@ export const productFeatures: ProductFeature[] = [
     id: "memory",
     num: "01",
     title: "Memory",
-    headline: "Persistent context across sessions",
-    body: "Agent strategies, skills, policies, past trades, and failure lessons are stored in 0G Storage and retrieved before every decision. No amnesia between runs.",
+    headline: "Persistent Bitget context",
+    body: "Bitget ticker, funding, open-interest, account, position, guardrail, and review records are stored and retrieved before every order decision.",
     icon: Brain
   },
   {
     id: "aegis",
     num: "02",
     title: "Aegis Risk",
-    headline: "Pre-execution safety review",
-    body: "Every transaction plan passes through deterministic policy checks and private AI reasoning before it touches money. Returns ALLOW, WARN, BLOCK, or REQUIRE_HUMAN.",
+    headline: "Pre-handoff safety review",
+    body: "Every Bitget futures order intent passes through leverage, notional, exposure, funding, stale-data, and human-confirmation checks.",
     icon: ShieldCheck
   },
   {
     id: "learning",
     num: "03",
     title: "Learning",
-    headline: "Structured failure reflection",
-    body: "Failed trades produce reusable lessons with root cause analysis, suggested policy changes, and human-approval flags. Future reviews start from evidence.",
+    headline: "Structured risk reflection",
+    body: "Blocked or skipped Bitget actions produce reusable lessons, suggested guardrail updates, and human-approval flags.",
     icon: GitBranch
   },
   {
@@ -245,23 +258,23 @@ export const productFeatures: ProductFeature[] = [
     num: "04",
     title: "Proofs",
     headline: "Verifiable audit trail on 0G Chain",
-    body: "Decision hashes, risk reports, and memory artifacts are anchored on-chain. Owners can verify that nothing was silently changed.",
+    body: "Decision hashes, Bitget risk reports, and memory artifacts can be anchored on-chain so operators can verify the review trail.",
     icon: KeyRound
   },
   {
     id: "profiles",
     num: "05",
     title: "Profiles",
-    headline: "One-call agent identity",
-    body: "Retrieve an agent's stable operating profile plus recent dynamic context in a single call. Skills, strategy, policy, and protocol trust — all in one response.",
+    headline: "One-call Bitget agent state",
+    body: "Retrieve the agent's profile plus recent Bitget market, position, policy, and review context in a single call.",
     icon: UserCircle2
   },
   {
     id: "context",
     num: "06",
     title: "Context",
-    headline: "Relevant memory retrieval",
-    body: "Before a trade plan is reviewed, the context module retrieves matching policies, past failures, trusted protocols, and strategy rules automatically.",
+    headline: "Relevant guardrail context",
+    body: "Before a futures order is reviewed, the context module retrieves matching policies, exposure snapshots, market state, and prior risk reports.",
     icon: Workflow
   }
 ];
@@ -269,16 +282,16 @@ export const productFeatures: ProductFeature[] = [
 export type ComparisonRow = {
   aspect: string;
   legacy: string;
-  ogmem: string;
+  bitmem: string;
 };
 
 export const comparisonRows: ComparisonRow[] = [
-  { aspect: "Memory", legacy: "Stateless between runs", ogmem: "Persistent across sessions" },
-  { aspect: "Safety", legacy: "Hope for the best", ogmem: "Policy + AI review before execution" },
-  { aspect: "Learning", legacy: "Repeat the same mistakes", ogmem: "Structured failure lessons" },
-  { aspect: "Audit", legacy: "No trail", ogmem: "Proof hashes on 0G Chain" },
-  { aspect: "Storage", legacy: "Centralized or none", ogmem: "Decentralized on 0G Storage" },
-  { aspect: "Privacy", legacy: "Exposed reasoning", ogmem: "Private compute via 0G Router" }
+  { aspect: "Market context", legacy: "Forgotten MCP responses", bitmem: "Persistent Bitget snapshots" },
+  { aspect: "Futures risk", legacy: "Ad hoc order checks", bitmem: "Leverage, notional, exposure, and funding guardrails" },
+  { aspect: "Execution", legacy: "Agent can jump straight to write tools", bitmem: "Dry-run handoff gated by ALLOW or human review" },
+  { aspect: "Audit", legacy: "No durable trail", bitmem: "Stored risk reports and proof hashes" },
+  { aspect: "Storage", legacy: "Local logs or dashboards only", bitmem: "0G-backed memory artifacts" },
+  { aspect: "Privacy", legacy: "Risk reasoning exposed in app logs", bitmem: "Private reasoning via 0G Router" }
 ];
 
 export type HowItWorksStep = {
@@ -288,9 +301,9 @@ export type HowItWorksStep = {
 };
 
 export const howItWorksSteps: HowItWorksStep[] = [
-  { num: "1", title: "Plug in", body: "Install the SDK, start the MCP server, or point your agent at the REST API." },
-  { num: "2", title: "Add memory", body: "Store strategies, policies, skills, and protocol trust profiles." },
-  { num: "3", title: "Review plan", body: "Submit a transaction plan. Aegis checks policy, calldata, and past failures." },
-  { num: "4", title: "Execute or stop", body: "Act on the ALLOW/WARN/BLOCK/REQUIRE_HUMAN decision." },
-  { num: "5", title: "Record & learn", body: "Store outcomes. Generate failure lessons. Anchor proof hashes on chain." }
+  { num: "1", title: "Connect Bitget", body: "Start Bitget Agent Hub read-only and initialize the BIT/MEM SDK or MCP layer." },
+  { num: "2", title: "Capture snapshots", body: "Store ticker, funding, open-interest, account, position, and tool-call observations." },
+  { num: "3", title: "Review order", body: "Submit a Bitget futures order intent. Aegis checks policy, exposure, and market context." },
+  { num: "4", title: "Handoff or stop", body: "Return ALLOW, WARN, BLOCK, or REQUIRE_HUMAN before any Bitget write operation." },
+  { num: "5", title: "Record & audit", body: "Store the report, outcome, human feedback, and proof hashes for future reviews." }
 ];

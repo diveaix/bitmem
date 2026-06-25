@@ -3,7 +3,7 @@ import type {
   ProofRecordInput,
   ProofRecordResult,
   RiskDecision,
-  ZeroGMemConfig
+  BitMemConfig
 } from "./types.js";
 
 export const AEGIS_PROOF_REGISTRY_ABI = [
@@ -90,7 +90,7 @@ export class ProofsClient {
 }
 
 export function createProofRecorderFromConfig(
-  chain: ZeroGMemConfig["chain"] = { provider: "local" }
+  chain: BitMemConfig["chain"] = { provider: "local" }
 ): ProofRecorder {
   if (chain.provider !== "0g") {
     return new LocalProofRecorder();

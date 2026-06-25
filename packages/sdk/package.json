@@ -1,5 +1,5 @@
 {
-  "name": "@0g-mem/sdk",
+  "name": "@bit-mem/sdk",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
@@ -9,9 +9,9 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./ogmem": {
-      "types": "./dist/ogmem.d.ts",
-      "import": "./dist/ogmem.js"
+    "./bitmem": {
+      "types": "./dist/bitmem.d.ts",
+      "import": "./dist/bitmem.js"
     },
     "./aegis": {
       "types": "./dist/aegis.d.ts",

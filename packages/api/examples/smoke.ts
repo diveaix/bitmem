@@ -1,10 +1,10 @@
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { create0GMemApi } from "../src/index.js";
+import { createBitMemApi } from "../src/index.js";
 
-const tempDir = await mkdtemp(join(tmpdir(), "0g-mem-api-smoke-"));
-const server = create0GMemApi({
+const tempDir = await mkdtemp(join(tmpdir(), "bit-mem-api-smoke-"));
+const server = createBitMemApi({
   authPath: join(tempDir, "auth.json"),
   memoryPath: join(tempDir, "memory.json")
 });

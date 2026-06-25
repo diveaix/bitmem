@@ -7,6 +7,7 @@ packages/*/dist/
 npm-debug.log*
 coverage/
 .0g-mem/
+.bit-mem/
 output/
 .agents/
 skills-lock.json
