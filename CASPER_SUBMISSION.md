@@ -26,13 +26,8 @@ sdk.casper
 
 It supports:
 
-- Casper AI Toolkit profile seeding through `seedAiToolkitProfile()`
 - Casper x402 quote memory through `rememberX402Quote()`
-- HTTP 402 payment-header parsing through `rememberX402QuoteFromHeaders()`
-- x402 payment attempt memory through `rememberX402PaymentAttempt()`
 - Casper MCP tool-call memory through `rememberMcpObservation()`
-- CSPR.cloud-style streaming event memory through `rememberStreamingEvent()`
-- Odra contract generation/test/deploy workflow memory through `rememberContractWorkflow()`
 - x402/MCP guardrail policy creation through `createAgentGuardrailPolicy()`
 - pre-action reviews through `assessAgentAction()`
 - decisions of `ALLOW`, `WARN`, `BLOCK`, or `REQUIRE_HUMAN`
@@ -44,7 +39,7 @@ Runnable demo:
 npm run example:casper
 ```
 
-The demo seeds Casper AI Toolkit capability memory, parses an x402 `402 Payment Required` response, stores an x402 payment attempt, records a CSPR.trade-style MCP observation, records a CSPR.cloud-style deploy stream event, stores an Odra contract workflow, reviews an x402 payment, and escalates DeFi/deploy writes that lack human confirmation.
+The demo creates a Casper agent policy, stores an x402 quote, records a CSPR.trade-style MCP observation, reviews an x402 payment, and escalates a DeFi write that lacks human confirmation.
 
 ## Best Submission Angle
 
@@ -57,12 +52,11 @@ This fits the Casper Agentic Buildathon because the product is about agents that
 ## Demo Story
 
 1. A Casper agent discovers a paid data endpoint or DeFi action through MCP/x402 tooling.
-2. BIT/MEM seeds the agent with Casper AI Toolkit capabilities: x402 Facilitator, Casper MCP, CSPR.trade MCP, CSPR.click, CSPR.cloud, Odra, and casper-eip-712.
-3. The agent writes the quote, payment attempt, chain event, contract workflow, or tool observation into BIT/MEM.
-4. BIT/MEM retrieves the agent's policy and prior action memory.
-5. The Casper adapter reviews the proposed action.
-6. Safe low-value reads can pass; over-budget payments are blocked; DeFi writes and deploys require human confirmation.
-7. The decision report is stored as memory and becomes future context for the same agent.
+2. The agent writes the quote or tool observation into BIT/MEM.
+3. BIT/MEM retrieves the agent's policy and prior action memory.
+4. The Casper adapter reviews the proposed action.
+5. Safe low-value reads can pass; over-budget payments are blocked; DeFi writes and deploys require human confirmation.
+6. The decision report is stored as memory and becomes future context for the same agent.
 
 ## What Is Already Built
 
@@ -75,14 +69,11 @@ This fits the Casper Agentic Buildathon because the product is about agents that
 - failure learning
 - proof hash infrastructure
 - Casper-specific SDK adapter and demo
-- Casper AI Toolkit capability memory utilities
-- x402 header/payment-attempt utilities
-- streaming event and Odra workflow utilities
-- tests for Casper x402, MCP, streaming, Odra, and action guardrails
+- tests for Casper x402 quote memory and action guardrails
 
 ## Honest Status
 
-The current Casper work is an SDK/infrastructure integration around Casper's agent surfaces. It does not deploy a new Casper smart contract or run a live Casper x402 payment in the demo. The defensible claim is that BIT/MEM is the risk, memory, and audit layer for agents that use Casper x402/MCP/CSPR.trade/CSPR.cloud/Odra capabilities.
+The current Casper work is an SDK/infrastructure integration around Casper's agent surfaces. It does not deploy a new Casper smart contract or run a live Casper x402 payment in the demo. The defensible claim is that BIT/MEM is the risk, memory, and audit layer for agents that use Casper x402/MCP/CSPR.trade capabilities.
 
 ## Casper References
 

@@ -10,9 +10,9 @@ Built for the 0G hackathon.
 
 ## Casper Agentic Buildathon Reframe
 
-BIT/MEM can also be submitted to the Casper Agentic Buildathon as a memory-backed guardrail and audit layer for Casper agents using x402 payments, MCP tools, CSPR.trade-style DeFi actions, CSPR.cloud-style streaming events, and Odra contract workflows.
+BIT/MEM can also be submitted to the Casper Agentic Buildathon as a memory-backed guardrail and audit layer for Casper agents using x402 payments, MCP tools, CSPR.trade-style DeFi actions, and agent-built workflows.
 
-The Casper adapter adds `sdk.casper` for AI Toolkit capability memory, x402 quote/header/payment-attempt memory, MCP tool-call memory, streaming event memory, Odra workflow memory, agent spend policies, and pre-action reviews that return `ALLOW`, `WARN`, `BLOCK`, or `REQUIRE_HUMAN`.
+The Casper adapter adds `sdk.casper` for x402 quote memory, MCP tool-call memory, agent spend policies, and pre-action reviews that return `ALLOW`, `WARN`, `BLOCK`, or `REQUIRE_HUMAN`.
 
 Start with:
 
@@ -204,7 +204,7 @@ BIT/MEM Learning + Proofs
 | `trades` | Record executed, failed, reverted, or skipped outcomes |
 | `learning` | Reflect on failures and store lessons |
 | `proofs` | Generate local proofs or anchor decisions on 0G Chain |
-| `casper` | Store Casper AI Toolkit, x402, MCP, streaming, and Odra workflow memory; review proposed agent actions |
+| `casper` | Store Casper x402/MCP observations and review proposed agent actions |
 | `bitget` | Ingest Bitget Agent Hub observations and review proposed Bitget futures orders |
 | `BitMemApiClient` | Use the hosted/local API through agent API keys |
 | `mcp` | Expose BIT/MEM as tools to LLM agents |
@@ -547,14 +547,11 @@ Demo story:
 Casper demo story:
 
 1. Create guardrails for a Casper agent using x402 and MCP tools.
-2. Seed Casper AI Toolkit capability memory for x402, Casper MCP, CSPR.trade, CSPR.click, CSPR.cloud, Odra, and casper-eip-712.
-3. Parse a Casper x402 `402 Payment Required` response into quote memory.
-4. Store a signed x402 payment attempt.
-5. Store a CSPR.trade-style MCP tool observation.
-6. Store a CSPR.cloud-style streaming deploy event.
-7. Store an Odra contract workflow after tests pass.
-8. Review proposed x402, DeFi, and deploy actions against spend/human-confirmation policy.
-9. Store each decision as future memory for audit and replay.
+2. Store a Casper x402 payment quote as protocol memory.
+3. Store a CSPR.trade-style MCP tool observation.
+4. Review a proposed x402 payment against spend and quote-age policy.
+5. Review a proposed Casper DeFi write and require human confirmation.
+6. Store each decision as future memory for audit and replay.
 
 Bitget demo story:
 
@@ -616,7 +613,7 @@ packages/
 - Aegis risk review
 - deterministic ERC20 calldata checks
 - failure reflection
-- Casper AI Toolkit/x402/MCP/streaming/Odra guardrail adapter
+- Casper x402/MCP guardrail adapter
 - local/file storage
 - optional 0G Storage adapter
 - 0G Compute Router client

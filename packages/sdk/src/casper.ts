@@ -5,13 +5,8 @@ import type { MemoryRecord, RiskDecision, RiskFinding } from "./types.js";
 export type CasperAgentActionSurface =
   | "x402"
   | "mcp"
-  | "casper-mcp"
   | "cspr-trade"
-  | "cspr-cloud"
-  | "cspr-click"
   | "odra"
-  | "streaming"
-  | "eip-712"
   | "manual";
 
 export type CasperAgentActionType =
@@ -19,29 +14,11 @@ export type CasperAgentActionType =
   | "defi_swap"
   | "liquidity_action"
   | "contract_deploy"
-  | "contract_upgrade"
   | "rwa_attestation"
   | "chain_query"
-  | "event_monitoring"
-  | "typed_data_signing"
   | "tool_call";
 
 export type CasperMcpRisk = "read" | "write" | "danger";
-
-export type CasperAiToolkitSurface =
-  | "x402-facilitator"
-  | "casper-mcp-server"
-  | "cspr-trade-mcp"
-  | "cspr-click-skill"
-  | "cspr-cloud-skill"
-  | "odra-framework"
-  | "casper-eip-712";
-
-export type CasperToolkitProfileInput = {
-  agentId: string;
-  surfaces?: CasperAiToolkitSurface[];
-  sourceUrl?: string;
-};
 
 export type CasperAgentGuardrailPolicy = {
   allowedServices: string[];
@@ -75,27 +52,6 @@ export type CasperX402QuoteInput = {
   raw?: Record<string, unknown>;
 };
 
-export type CasperX402HeadersInput = {
-  agentId: string;
-  service: string;
-  endpoint: string;
-  headers: Record<string, string | number | undefined>;
-  amountUsd?: string | number;
-  observedAt?: string;
-};
-
-export type CasperX402PaymentStatus = "quoted" | "signed" | "settled" | "failed";
-
-export type CasperX402PaymentAttemptInput = CasperX402QuoteInput & {
-  status: CasperX402PaymentStatus;
-  paymentAddress?: string;
-  paymentAmount?: string | number;
-  paymentNetwork?: string;
-  paymentProof?: string;
-  transactionHash?: string;
-  error?: string;
-};
-
 export type CasperMcpObservationInput = {
   agentId: string;
   server: string;
@@ -105,60 +61,6 @@ export type CasperMcpObservationInput = {
   request?: Record<string, unknown>;
   response?: Record<string, unknown>;
   summary?: string;
-};
-
-export type CasperStreamingEventType =
-  | "deploy"
-  | "transfer"
-  | "contract_call"
-  | "contract_state"
-  | "balance"
-  | "staking";
-
-export type CasperStreamingEventInput = {
-  agentId: string;
-  eventType: CasperStreamingEventType;
-  source?: "cspr-cloud" | "casper-mcp" | "manual";
-  eventId?: string;
-  blockHeight?: string | number;
-  deployHash?: string;
-  account?: string;
-  contractHash?: string;
-  contractPackageHash?: string;
-  amount?: string | number;
-  observedAt?: string;
-  summary?: string;
-  raw?: Record<string, unknown>;
-};
-
-export type CasperContractWorkflowStage =
-  | "generated"
-  | "tested"
-  | "deploy_planned"
-  | "deployed"
-  | "upgrade_planned"
-  | "upgraded"
-  | "failed";
-
-export type CasperContractWorkflowInput = {
-  agentId: string;
-  contractName: string;
-  framework?: "odra" | "casper-wasm" | "manual";
-  workflowStage: CasperContractWorkflowStage;
-  docsSource?: string;
-  files?: string[];
-  tests?: {
-    passed?: number;
-    failed?: number;
-    command?: string;
-  };
-  contractHash?: string;
-  contractPackageHash?: string;
-  deployHash?: string;
-  upgradeable?: boolean;
-  observedAt?: string;
-  summary?: string;
-  raw?: Record<string, unknown>;
 };
 
 export type CasperAgentActionReviewInput = {
@@ -207,129 +109,8 @@ const DEFAULT_CASPER_POLICY: CasperAgentGuardrailPolicy = {
   blockDangerousMcpTools: true
 };
 
-const DEFAULT_TOOLKIT_SURFACES: CasperAiToolkitSurface[] = [
-  "x402-facilitator",
-  "casper-mcp-server",
-  "cspr-trade-mcp",
-  "cspr-click-skill",
-  "cspr-cloud-skill",
-  "odra-framework",
-  "casper-eip-712"
-];
-
-const TOOLKIT_SURFACE_MEMORY: Record<
-  CasperAiToolkitSurface,
-  {
-    kind: "skill" | "protocol_profile";
-    title: string;
-    capabilities: string[];
-    tags: string[];
-  }
-> = {
-  "x402-facilitator": {
-    kind: "protocol_profile",
-    title: "Casper x402 Facilitator",
-    capabilities: [
-      "HTTP 402 payment-required flow",
-      "pay-per-request agent commerce",
-      "cryptographic payment proof verification"
-    ],
-    tags: ["x402", "micropayments", "facilitator"]
-  },
-  "casper-mcp-server": {
-    kind: "protocol_profile",
-    title: "Casper MCP Server",
-    capabilities: [
-      "query balances",
-      "submit deploys",
-      "read contract state",
-      "chain access through natural language tools"
-    ],
-    tags: ["mcp", "chain-query", "deploys"]
-  },
-  "cspr-trade-mcp": {
-    kind: "protocol_profile",
-    title: "CSPR.trade MCP Server",
-    capabilities: [
-      "get swap quotes",
-      "trade through a DEX MCP server",
-      "provide liquidity",
-      "manage DeFi portfolios"
-    ],
-    tags: ["mcp", "defi", "cspr-trade"]
-  },
-  "cspr-click-skill": {
-    kind: "skill",
-    title: "CSPR.click AI Agent Skill",
-    capabilities: [
-      "wallet creation and key management",
-      "transaction building and signing",
-      "event handling",
-      "CSPR.cloud API access"
-    ],
-    tags: ["agent-skill", "wallet", "signing"]
-  },
-  "cspr-cloud-skill": {
-    kind: "skill",
-    title: "CSPR.cloud AI Agent Skill",
-    capabilities: [
-      "REST API access",
-      "Streaming API access",
-      "Node API access",
-      "read and write Casper data at scale"
-    ],
-    tags: ["agent-skill", "cspr-cloud", "streaming"]
-  },
-  "odra-framework": {
-    kind: "skill",
-    title: "Odra Framework",
-    capabilities: [
-      "AI-discoverable llms.txt documentation",
-      "generate Casper smart contracts",
-      "test Casper contracts",
-      "deploy Casper contracts"
-    ],
-    tags: ["odra", "smart-contracts", "llms"]
-  },
-  "casper-eip-712": {
-    kind: "protocol_profile",
-    title: "casper-eip-712",
-    capabilities: [
-      "off-chain typed-data signing",
-      "gasless meta-transaction support",
-      "human-readable signing payloads",
-      "structured verification for agent commerce"
-    ],
-    tags: ["eip-712", "typed-data", "signing"]
-  }
-};
-
 export class CasperAgentInfraClient {
   constructor(private readonly memory: MemoryClient) {}
-
-  async seedAiToolkitProfile(input: CasperToolkitProfileInput): Promise<MemoryRecord[]> {
-    const sourceUrl = input.sourceUrl ?? "https://www.casper.network/ai";
-    const surfaces = input.surfaces ?? DEFAULT_TOOLKIT_SURFACES;
-
-    return Promise.all(
-      surfaces.map((surface) => {
-        const item = TOOLKIT_SURFACE_MEMORY[surface];
-        return this.memory.add({
-          agentId: input.agentId,
-          kind: item.kind,
-          title: item.title,
-          content: {
-            network: "casper",
-            surface,
-            sourceUrl,
-            capabilityType: "casper_ai_toolkit_surface",
-            capabilities: item.capabilities
-          },
-          tags: ["casper", "ai-toolkit", surface, ...item.tags]
-        });
-      })
-    );
-  }
 
   async createAgentGuardrailPolicy(
     input: CasperAgentGuardrailPolicyInput
@@ -375,44 +156,6 @@ export class CasperAgentInfraClient {
     });
   }
 
-  async rememberX402QuoteFromHeaders(input: CasperX402HeadersInput): Promise<MemoryRecord> {
-    return this.rememberX402Quote(createCasperX402QuoteFromHeaders(input));
-  }
-
-  async rememberX402PaymentAttempt(
-    input: CasperX402PaymentAttemptInput
-  ): Promise<MemoryRecord> {
-    const observedAt = input.observedAt ?? new Date().toISOString();
-    const service = normalizeName(input.service);
-    return this.memory.add({
-      agentId: input.agentId,
-      kind: input.status === "failed" ? "risk_report" : "protocol_profile",
-      title: `Casper x402 ${input.status}: ${service} ${input.endpoint}`,
-      content: {
-        network: "casper",
-        surface: "x402",
-        snapshotType: "payment_attempt",
-        status: input.status,
-        service,
-        endpoint: input.endpoint,
-        amountUsd: coerceNumber(input.amountUsd),
-        amountCspr: input.amountCspr === undefined ? undefined : String(input.amountCspr),
-        currency: input.currency ?? "CSPR",
-        facilitator: input.facilitator ?? "casper-x402",
-        paymentAddress: input.paymentAddress,
-        paymentAmount: input.paymentAmount === undefined ? undefined : String(input.paymentAmount),
-        paymentNetwork: input.paymentNetwork,
-        paymentProof: input.paymentProof,
-        transactionHash: input.transactionHash,
-        error: input.error,
-        observedAt,
-        expiresAt: input.expiresAt,
-        raw: input.raw
-      },
-      tags: ["casper", "x402", "payment-attempt", input.status, service]
-    });
-  }
-
   async rememberMcpObservation(input: CasperMcpObservationInput): Promise<MemoryRecord> {
     const observedAt = input.observedAt ?? new Date().toISOString();
     const server = normalizeName(input.server);
@@ -433,72 +176,6 @@ export class CasperAgentInfraClient {
         summary: input.summary
       },
       tags: ["casper", "mcp", "tool-observation", server, input.risk]
-    });
-  }
-
-  async rememberStreamingEvent(input: CasperStreamingEventInput): Promise<MemoryRecord> {
-    const observedAt = input.observedAt ?? new Date().toISOString();
-    return this.memory.add({
-      agentId: input.agentId,
-      kind: "protocol_profile",
-      title: `Casper streaming event: ${input.eventType}`,
-      content: {
-        network: "casper",
-        surface: "streaming",
-        snapshotType: "streaming_event",
-        source: input.source ?? "cspr-cloud",
-        eventType: input.eventType,
-        eventId: input.eventId,
-        blockHeight: input.blockHeight === undefined ? undefined : String(input.blockHeight),
-        deployHash: input.deployHash,
-        account: input.account,
-        contractHash: input.contractHash,
-        contractPackageHash: input.contractPackageHash,
-        amount: input.amount === undefined ? undefined : String(input.amount),
-        observedAt,
-        summary: input.summary,
-        raw: input.raw
-      },
-      tags: ["casper", "streaming", input.eventType, input.source ?? "cspr-cloud"]
-    });
-  }
-
-  async rememberContractWorkflow(
-    input: CasperContractWorkflowInput
-  ): Promise<MemoryRecord> {
-    const observedAt = input.observedAt ?? new Date().toISOString();
-    return this.memory.add({
-      agentId: input.agentId,
-      kind:
-        input.workflowStage === "failed" || input.workflowStage.endsWith("_planned")
-          ? "risk_report"
-          : "protocol_profile",
-      title: `Casper contract ${input.workflowStage}: ${input.contractName}`,
-      content: {
-        network: "casper",
-        surface: "odra",
-        snapshotType: "contract_workflow",
-        contractName: input.contractName,
-        framework: input.framework ?? "odra",
-        workflowStage: input.workflowStage,
-        docsSource: input.docsSource ?? "https://odra.dev/llms.txt",
-        files: input.files,
-        tests: input.tests,
-        contractHash: input.contractHash,
-        contractPackageHash: input.contractPackageHash,
-        deployHash: input.deployHash,
-        upgradeable: input.upgradeable,
-        observedAt,
-        summary: input.summary,
-        raw: input.raw
-      },
-      tags: [
-        "casper",
-        "odra",
-        "contract-workflow",
-        input.workflowStage,
-        normalizeName(input.contractName)
-      ]
     });
   }
 
@@ -643,15 +320,14 @@ export class CasperAgentInfraClient {
     }
 
     if (
-      (input.actionType === "contract_deploy" ||
-        input.actionType === "contract_upgrade") &&
+      input.actionType === "contract_deploy" &&
       policy.requireHumanForContractDeploys &&
       input.humanConfirmed !== true
     ) {
       findings.push({
         code: "CASPER_CONTRACT_DEPLOY_REQUIRES_HUMAN",
         severity: "warning",
-        message: "Casper contract deploys and upgrades require human confirmation by policy."
+        message: "Casper contract deploys require human confirmation by policy."
       });
       requiresHuman = true;
     }
@@ -739,51 +415,6 @@ export class CasperAgentInfraClient {
 
 export function defaultCasperAgentPolicy(): CasperAgentGuardrailPolicy {
   return { ...DEFAULT_CASPER_POLICY };
-}
-
-export function createCasperX402QuoteFromHeaders(
-  input: CasperX402HeadersInput
-): CasperX402QuoteInput {
-  const paymentAddress = getHeader(input.headers, "x-payment-address");
-  const paymentAmount = getHeader(input.headers, "x-payment-amount");
-  const paymentNetwork = getHeader(input.headers, "x-payment-network") ?? "casper";
-  const paymentProof = getHeader(input.headers, "x-payment");
-
-  return {
-    agentId: input.agentId,
-    service: input.service,
-    endpoint: input.endpoint,
-    amountUsd: input.amountUsd,
-    amountCspr: paymentAmount ? motesToCspr(paymentAmount) : undefined,
-    currency: paymentNetwork.toLowerCase() === "casper" ? "CSPR" : paymentNetwork,
-    facilitator: "casper-x402",
-    observedAt: input.observedAt,
-    raw: {
-      paymentAddress,
-      paymentAmount,
-      paymentNetwork,
-      paymentProof,
-      headers: input.headers
-    }
-  };
-}
-
-function getHeader(
-  headers: Record<string, string | number | undefined>,
-  name: string
-): string | undefined {
-  const normalized = name.toLowerCase();
-  const key = Object.keys(headers).find((candidate) => candidate.toLowerCase() === normalized);
-  const value = key ? headers[key] : undefined;
-  return value === undefined ? undefined : String(value);
-}
-
-function motesToCspr(value: string): string {
-  if (!/^\d+$/.test(value)) return value;
-  const padded = value.padStart(10, "0");
-  const whole = padded.slice(0, -9) || "0";
-  const fractional = padded.slice(-9).replace(/0+$/, "");
-  return fractional ? `${whole}.${fractional}` : whole;
 }
 
 function normalizePolicy(
